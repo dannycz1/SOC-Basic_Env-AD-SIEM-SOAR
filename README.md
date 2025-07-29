@@ -7,10 +7,10 @@ This project demonstrates the implementation of an Active Directory environment 
 The deployment was carried out in the cloud using Vultr and is designed as a practical project for a SOC Analyst portfolio.
 
 ## 🎯 Objectives
-- Set up an AD environment in the cloud (Vultr).
-- Integrate Splunk for log ingestion and alert creation.
-- Automate response actions with Shuffle and Slack (SOAR).
-- Provide practical evidence applicable to a SOC Analyst role.
+- Configure a cloud-based Active Directory environment.
+- Ingest Windows Security logs into Splunk and create a detection rule.
+- Implement a SOAR playbook to respond to unauthorized successful logins.
+- Document the process and provide evidence of practical skills applicable to SOC operations.
 
 ## 📂 Repository Content
 - **01-Diagrams/** → Initial and final architecture diagrams.
@@ -18,17 +18,20 @@ The deployment was carried out in the cloud using Vultr and is designed as a pra
 - **03-Evidences/** → Screenshots of the environment in action (alerts, logs, Slack).
 - **REPORT.pdf** → Executive summary and lessons learned.
 
-## 🛠️ Tools Used
-- Active Directory (Windows Server)
-- Splunk (SIEM)
-- Shuffle (SOAR)
-- Slack (notifications)
-- Vultr (Cloud Infrastructure)
+## 🛠️ Tools & Technologies Used
+| Tool/Service   | Purpose                                      |
+|----------------|----------------------------------------------|
+| **Vultr**      | Cloud provider for hosting the environment. |
+| **Active Directory** | Domain Controller and authentication source. |
+| **Splunk**     | SIEM platform for log ingestion and alerting. |
+| **Shuffle**    | SOAR platform for automated response.       |
+| **Slack**      | Notification channel for SOC analysts.      |
 
 ## 📈 Professional Value
-This project demonstrates skills in:
-- AD administration and user management.
-- SIEM configuration for incident detection.
-- Creating automation playbooks in SOAR.
-- Technical documentation following best practices.
+This project highlights skills crucial for SOC roles:
+- **Active Directory administration** for identity and access management.
+- **SIEM configuration (Splunk)** for log ingestion and alert creation.
+- **SOAR automation (Shuffle)** for incident response workflows.
+- **Clear documentation and evidence collection**, reflecting real-world SOC reporting practices.
+
 
