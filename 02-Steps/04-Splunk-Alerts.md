@@ -51,6 +51,8 @@ ufw allow 8000
     
     - Go to Splunk website → Products → Free Trials & Downloads → Universal Forwarder: Download the appropriate version.        
     - Double-click the installer, specify Username. Do not place anything on the "Deployment Server", but put it on the "Receiving Server" (IP and Port), then click Next some times, and Install.
+ 
+      ![deploy-panel](../03-Evidences/step_4-universal-forwarder-setup.png)
               
 - **Edit the `inputs.conf` file:**        
         - Copy `C:/Program Files/SplunkUniversalForwarder/etc/system/default/inputs.conf` to `C:/Program Files/SplunkUniversalForwarder/etc/system/local/`
@@ -72,12 +74,31 @@ index=[index_name]
         
 	> If no events appear, ensure port 9997 is open on the Ubuntu server.
 
-### 3. Verified ingestion of EventCode 4624 (successful logins) in Splunk.
-### 4. Created a correlation search to detect successful logins from unauthorized accounts.
+### 3. Created a correlation search to detect unauthorized successful logins (from unauthorized networks)
+Event 4627 indicates a successful login. This event has different login types; in this case, we'll focus on types 7 (unlock) and 10 (RemoteInteractive).
+
+- The following search, although it can be optimized, gives us what we need for now:
+```
+index=mydfir-ad EventCode=4624 (Logon_Type=7 OR Logon_Type=10) Source_Network_Address=* Source_Network_Address!="-" Source_Network_Address!=10.*
+| stats count by _time,ComputerName,Source_Network_Address,user,Logon_Type
+```
+
+- We select the "save as alert" option and choose the options shown in the image:
+
+ ![deploy-panel](../03-Evidences/step_4-alert-configuration.png)
 
 ## 📷 Evidence
-- Splunk search showing ingested Windows events.  
-- Alert rule configured in Splunk (screenshot of correlation search).  
+- **File `inputs.conf`**
+
+![deploy-panel](../03-Evidences/step_4-file-inputs.conf.png)
+
+- **Splunk search showing ingested Windows events.**
+
+![deploy-panel](../03-Evidences/step_4-ingested-data.png)
+
+- **Alert rule configured in Splunk.**
+
+![deploy-panel](../03-Evidences/step_4-alerts.png)
 
 ## 🔗 Key Takeaways
 - Understanding of SIEM log ingestion and configuration.  
