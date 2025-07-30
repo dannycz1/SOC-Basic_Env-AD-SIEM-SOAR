@@ -23,8 +23,55 @@ ufw allow 8000
 ```
   - I now have access to Splunk from my personal laptop.
   ![deploy-panel](../03-Evidences/step_4-splunk_web_access.png)
+
+### ⚙️There are still some settings missing here.
+
+1. **Set the Time Zone to GMT**    
+    - Navigate to: `Administrator > Preferences`        
+    - Select **GMT** as the time zone.
+        
+2. **Install the Splunk Add-on for Microsoft Windows**    
+    - Go to **Apps > Manage Apps > Install App from File or URL**.        
+    - Install **Splunk Add-on for Microsoft Windows**.        
+    - Use the same credentials created on [splunk.com](https://www.splunk.com/).
+        
+3. **Create a New Index**    
+    - Navigate to: `Settings > Indexes > New Index`.        
+    - Enter any desired **Name** for the index.        
+    - Click **Save**.
+        
+4. **Enable Data Receiving from Forwarder**    
+    - Go to: `Settings > Forwarding and Receiving > Configure Receiving`.        
+    - Click **New Receiving Port**.        
+    - Enter port **9997** and click **Save** (don't forget the Azure Firewall).
     
-### 2. Configured Universal Forwarder on Windows Server (DC01) to send Security Event Logs.
+### 2. Configured Universal Forwarder on Windows (ADDC01 and ADClient01) to send Security Event Logs.
+
+- **Universal Forwarder on Windows**:
+    
+    - Go to Splunk website → Products → Free Trials & Downloads → Universal Forwarder: Download the appropriate version.        
+    - Double-click the installer, specify Username. Do not place anything on the "Deployment Server", but put it on the "Receiving Server" (IP and Port), then click Next some times, and Install.
+              
+- **Edit the `inputs.conf` file:**        
+        - Copy `C:/Program Files/SplunkUniversalForwarder/etc/system/default/inputs.conf` to `C:/Program Files/SplunkUniversalForwarder/etc/system/local/`
+        - Edit the newly created `inputs.conf` file and add at the end:
+            
+            ```txt
+            [WinEventLog://Security]
+            index = [name of your index]
+            disabled = false
+            ```
+            
+- **Modify the "SplunkForwarder" service:**        
+	- Double-click the service → Log On → select "Local System account". Apply and restart the service.
+   
+- **Test:** In Splunk, run a simple search to confirm event ingestion in the new index:        
+```SPL
+index=[index_name]
+```
+        
+	> If no events appear, ensure port 9997 is open on the Ubuntu server.
+
 ### 3. Verified ingestion of EventCode 4624 (successful logins) in Splunk.
 ### 4. Created a correlation search to detect successful logins from unauthorized accounts.
 
